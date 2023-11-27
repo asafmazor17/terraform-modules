@@ -41,11 +41,13 @@ jobs:
       - name: locating the runner in the correct path
         run: 
           |
+          ls -ltr && pwd &&
           if [[ "${{inputs.environment}}" == "integration" || "${{inputs.environment}}" == "staging" ]]; then
             cd integration/key_vault/
           else
             cd production/key_vault/
           fi
+          ls -ltr && pwd
           
       # Runs a set of commands using the runners shell
       - name: run terraform init
