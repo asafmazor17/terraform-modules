@@ -14,14 +14,13 @@ on:
         - staging
         - production
 
-
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: self-hosted
+    
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -38,20 +37,25 @@ jobs:
             az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
           fi
 
-      - name: locating the runner in the correct path
-        run: 
-          |
-          if [[ "${{inputs.environment}}" == "integration" || "${{inputs.environment}}" == "staging" ]]; then
-            cd integration/key_vault/
-          else
-            cd production/key_vault/
-          fi
-          
+      # - name: locating the runner in the correct path
+      #   run: 
+      #     |
+      #     if [[ "${{inputs.environment}}" == "integration" || "${{inputs.environment}}" == "staging" ]]; then
+      #       cd integration/key_vault/
+      #     else
+      #       cd production/key_vault/
+      #     fi
+
+      - name: Set working directory
+        run: echo "::set-env name=WORK_DIR::./${{ inputs.environment }}/key_vault/"
+
       # Runs a set of commands using the runners shell
       - name: run terraform init
+        working-directory: ${{ env.WORK_DIR }}
         run: ls -ltr && pwd && terraform init
 
       - name: run terraform plan
+        working-directory: ${{ env.WORK_DIR }}
         run: terraform plan
 
       - name: finish job
