@@ -47,9 +47,6 @@ jobs:
       #       cd production/key_vault/
       #     fi
 
-      - name: Set working directory
-        run: echo "::set-env name=WORK_DIR::./${{ inputs.environment }}/key_vault/"
-
       # Runs a set of commands using the runners shell
       - name: run terraform init
         working-directory: ${{ env.WORK_DIR }}
