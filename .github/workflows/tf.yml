@@ -38,23 +38,14 @@ jobs:
             az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
           fi
 
-      # - name: locating the runner in the correct path
-      #   run: 
-      #     |
-      #     if [[ "${{inputs.environment}}" == "integration" || "${{inputs.environment}}" == "staging" ]]; then
-      #       cd integration/key_vault/
-      #     else
-      #       cd production/key_vault/
-      #     fi
-
       # Runs a set of commands using the runners shell
       - name: run terraform init
         working-directory: ${{ env.WORK_DIR }}
-        run: ls -ltr && pwd && terraform init
+        run: terraform init
 
       - name: run terraform plan
         working-directory: ${{ env.WORK_DIR }}
         run: terraform plan
 
-      - name: finish job
-        run: echo "Job finished"
+      - name: terraform apply
+        run: terraform apply -auto-approve
