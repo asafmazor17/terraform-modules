@@ -1,8 +1,5 @@
-# This is a basic workflow to help you get started with Actions
+name: Terraform flow
 
-name: tf
-
-# Controls when the workflow will run
 on:
   workflow_dispatch:
     inputs:
@@ -13,22 +10,22 @@ on:
         - integration
         - staging
         - production
+      resource:
+        type: choice
+        description: Which resource you wish to create
+        options:
+        - key-vault
+        - storage-account
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: self-hosted
     env:
-      WORK_DIR: ${{ inputs.environment }}/key_vault/
+      WORK_DIR: ${{ inputs.environment }}/${{ inputs.resource }}/
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
       - name: Authenticate to Azure
         run: 
           |
@@ -38,7 +35,6 @@ jobs:
             az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
           fi
 
-      # Runs a set of commands using the runners shell
       - name: run terraform init
         working-directory: ${{ env.WORK_DIR }}
         run: terraform init
