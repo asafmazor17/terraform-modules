@@ -4,14 +4,17 @@ name: tf
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-  #   branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Which environment you wish to use
+        options:
+        - integration
+        - staging
+        - production
+
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -27,8 +30,23 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Authenticate to Azure
-        run: az login --service-principal -u ${{secrets.CLIENT_ID}} -p ${{secrets.CLIENT_SECRET}} --tenant ${{secrets.TENANT_ID}}
+        run: 
+          |
+          if ${{inputs.environment}} == "integration" || ${{inputs.environment}} == "staging"; then
+            az login --service-principal -u ${{secrets.CLIENT_ID}} -p ${{secrets.CLIENT_SECRET}} --tenant ${{secrets.TENANT_ID}}
+          else
+            az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
+          fi
 
+      - name: locating the runner in the correct path
+        run: 
+          |
+          if ${{inputs.environment}} == "integration" || ${{inputs.environment}} == "staging"; then
+            cd integration/key_vault/
+          else
+            cd production/key_vault/
+          fi
+          
       # Runs a set of commands using the runners shell
       - name: run terraform init
         run: terraform init
