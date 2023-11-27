@@ -8,7 +8,6 @@ on:
         description: Which environment you wish to use
         options:
         - integration
-        - staging
         - production
       resource:
         type: choice
@@ -29,7 +28,7 @@ jobs:
       - name: Authenticate to Azure
         run: 
           |
-          if [[ "${{inputs.environment}}" == "integration" || "${{inputs.environment}}" == "staging" ]]; then
+          if [[ "${{inputs.environment}}" == "integration" ]]; then
             az login --service-principal -u ${{secrets.CLIENT_ID}} -p ${{secrets.CLIENT_SECRET}} --tenant ${{secrets.TENANT_ID}}
           else
             az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
