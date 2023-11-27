@@ -11,7 +11,7 @@ variable "location" {
 
   validation {
     condition = contains(["East US2", "Central US"], var.location)
-    error_message = "location must be East US2 or Central US."
+    error_message = "Location must be East US2 or Central US."
   }
 }
 
@@ -32,7 +32,7 @@ variable "environment" {
 
   validation {
     condition = contains(["dev", "production"], var.environment)
-    error_message = "environment must be dev or production."
+    error_message = "Environment must be dev or production."
   }
 }
 
