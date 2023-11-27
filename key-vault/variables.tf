@@ -20,12 +20,6 @@ variable "resource_group_name" {
     description = "The resource group name."
 }
 
-variable "existing_resource_group_name" {
-    type = string
-    description = "The existing resource group name."
-    default = "int-kv-rg"
-}
-
 variable "environment" {
   type = string
   description = "(Required) The environment that will be used for the kv."
