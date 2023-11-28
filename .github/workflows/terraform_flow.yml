@@ -25,14 +25,32 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Authenticate to Azure
+      # - name: Authenticate to Azure
+      #   run: 
+      #     |
+      #     if [[ "${{inputs.environment}}" == "integration" ]]; then
+      #       az login --service-principal -u ${{secrets.CLIENT_ID}} -p ${{secrets.CLIENT_SECRET}} --tenant ${{secrets.TENANT_ID}}
+      #     else
+      #       az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
+      #     fi
+
+      - name: Manipulate user environment selection
         run: 
           |
           if [[ "${{inputs.environment}}" == "integration" ]]; then
-            az login --service-principal -u ${{secrets.CLIENT_ID}} -p ${{secrets.CLIENT_SECRET}} --tenant ${{secrets.TENANT_ID}}
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> $GITHUB_ENV
+            echo "SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
           else
-            az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID_PROD }}" >> $GITHUB_ENV
+            echo "SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
           fi
+
+      - name: Authenticate to Azure
+        uses: azure/login@v1
+        with:
+            client-id: ${{ env.CLIENT_ID }}
+            tenant-id: ${{ secrets.TENANT_ID }}
+            subscription-id: ${{ env.SUBSCRIPTION_ID }}
 
       - name: run terraform init
         working-directory: ${{ env.WORK_DIR }}
@@ -42,6 +60,6 @@ jobs:
         working-directory: ${{ env.WORK_DIR }}
         run: terraform plan
 
-      - name: terraform apply
-        working-directory: ${{ env.WORK_DIR }}
-        run: terraform apply -auto-approve
+      # - name: terraform apply
+      #   working-directory: ${{ env.WORK_DIR }}
+      #   run: terraform apply -auto-approve
