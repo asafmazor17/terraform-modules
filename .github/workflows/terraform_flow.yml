@@ -34,7 +34,7 @@ jobs:
       - name: Log in with Azure
         uses: azure/login@v1
         with:  
-          creds: ${{ inputs.environment == 'integration' && 'secrets.INTEGRATION_CREDS' || 'secrets.PRODUCTION_CREDS'}}
+          creds: ${{ inputs.environment == 'integration' && secrets.INTEGRATION_CREDS || secrets.PRODUCTION_CREDS}}
 
       - name: run terraform init
         working-directory: ${{ env.WORK_DIR }}
