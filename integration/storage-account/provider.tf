@@ -5,12 +5,12 @@ terraform {
       version = ">=3.0.0"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "int-kv-rg"
-    storage_account_name = "asaftestrgst"
-    container_name       = "test"
-    key                  = "intstorage.tfstate"
-  }
+  # backend "azurerm" {
+  #   resource_group_name  = "int-kv-rg"
+  #   storage_account_name = "asaftestrgst"
+  #   container_name       = "test"
+  #   key                  = "intstorage.tfstate"
+  # }
 }
 
 provider "azurerm" {
