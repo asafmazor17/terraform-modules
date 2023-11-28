@@ -31,19 +31,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Manipulate user environment selection
-        run: 
-          |
-          if [[ "${{inputs.environment}}" == "integration" ]]; then
-            echo "AUTHENTICATION_CREDS=${{ secrets.INTEGRATION_CREDS }}" >> $GITHUB_ENV
-          else
-            echo "AUTHENTICATION_CREDS=${{ secrets.PRODUCTION_CREDS }}" >> $GITHUB_ENV
-          fi
-
       - name: Log in with Azure
         uses: azure/login@v1
-        with:
-          creds: '${{ env.AUTHENTICATION_CREDS }}'      
+        with:  
+          creds: ${{ inputs.environment == 'integration' && 'secrets.INTEGRATION_CREDS' || 'secrets.PRODUCTION_CREDS'}}
 
       - name: run terraform init
         working-directory: ${{ env.WORK_DIR }}
