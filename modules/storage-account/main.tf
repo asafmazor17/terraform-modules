@@ -1,7 +1,7 @@
 resource "azurerm_resource_group" "rg" {
-    count = var.resource_group_name == "" ? 0 : 1
-    name = var.resource_group_name
-    location = var.location
+  count    = var.resource_group_name == "" ? 0 : 1
+  name     = var.resource_group_name
+  location = var.location
 }
 
 resource "azurerm_storage_account" "storage" {
@@ -11,5 +11,5 @@ resource "azurerm_storage_account" "storage" {
   account_tier             = local.tier
   account_replication_type = "GRS"
 
-  depends_on = [ azurerm_resource_group.rg ]
+  depends_on = [azurerm_resource_group.rg]
 }
