@@ -35,19 +35,15 @@ jobs:
         run: 
           |
           if [[ "${{inputs.environment}}" == "integration" ]]; then
-            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> $GITHUB_ENV
-            echo "SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+            echo "AUTHENTICATION_CREDS=${{ secrets.INTEGRATION_CREDS }}" >> $GITHUB_ENV
           else
-            echo "CLIENT_ID=${{ secrets.CLIENT_ID_PROD }}" >> $GITHUB_ENV
-            echo "SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID_PROD }}" >> $GITHUB_ENV
+            echo "AUTHENTICATION_CREDS=${{ secrets.PRODUCTION_CREDS }}" >> $GITHUB_ENV
           fi
 
-      - name: Authenticate to Azure
+      - name: Log in with Azure
         uses: azure/login@v1
         with:
-            client-id: ${{ env.CLIENT_ID }}
-            tenant-id: ${{ secrets.TENANT_ID }}
-            subscription-id: ${{ env.SUBSCRIPTION_ID }}
+          creds: '${{ env.AUTHENTICATION_CREDS }}'      
 
       - name: run terraform init
         working-directory: ${{ env.WORK_DIR }}
