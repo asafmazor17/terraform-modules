@@ -24,6 +24,7 @@ permissions:
 jobs:
   build:
     runs-on: self-hosted
+    environment: ${{ inputs.environment }}
     env:
       WORK_DIR: ${{ inputs.environment }}/${{ inputs.resource }}/
 
