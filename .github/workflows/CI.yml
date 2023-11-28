@@ -39,7 +39,7 @@ jobs:
       - name: Terraform linting using Checkov
         run: |
           for FOLDER in modules/*; do
-           if ! checkov -d ./modules/$FOLDER; then
+           if ! checkov -d $FOLDER; then
              echo "Checkov tests failed. please fix it and run it again." 
              exit 1
            else
