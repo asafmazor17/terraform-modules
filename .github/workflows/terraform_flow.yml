@@ -31,15 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Authenticate to Azure
-      #   run: 
-      #     |
-      #     if [[ "${{inputs.environment}}" == "integration" ]]; then
-      #       az login --service-principal -u ${{secrets.CLIENT_ID}} -p ${{secrets.CLIENT_SECRET}} --tenant ${{secrets.TENANT_ID}}
-      #     else
-      #       az login --service-principal -u ${{secrets.CLIENT_ID_PROD}} -p ${{secrets.CLIENT_SECRET_PROD}} --tenant ${{secrets.TENANT_ID}}
-      #     fi
-
       - name: Manipulate user environment selection
         run: 
           |
@@ -65,7 +56,3 @@ jobs:
       - name: run terraform plan
         working-directory: ${{ env.WORK_DIR }}
         run: terraform plan
-
-      # - name: terraform apply
-      #   working-directory: ${{ env.WORK_DIR }}
-      #   run: terraform apply -auto-approve
