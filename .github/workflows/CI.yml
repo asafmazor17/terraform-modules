@@ -4,27 +4,24 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: self-hosted
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+        # Making sure all code is formatted as one piece
       - name: Terraform Format Check
         run: |
           terraform fmt -recursive
           if [ -n "$(git diff)" ]; then
-            echo "Changes made by terraform fmt"
+            echo "Some terraform files need to be formatted. Run 'terraform fmt -recursive' to fix them."
+            exit 1
           else
             echo "No changes made by terraform fmt"
           fi
 
+        # Making sure that the terraform code has no mistakes
       - name: Terraform Validation Check
         run: |
            for FOLDER in modules/*; do
@@ -39,5 +36,13 @@ jobs:
             popd
            done
              
-      - name: Terraform linting
+      - name: Terraform linting using Checkov
         run: |
+          for FOLDER in modules/*; do
+           if ! checkov -d ./modules/$FOLDER; then
+             echo "Checkov tests failed. please fix it and run it again." 
+             exit 1
+           else
+              echo "Checkov tests finished successfully. continue."
+           fi
+          done
