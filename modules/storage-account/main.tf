@@ -9,7 +9,7 @@ resource "azurerm_storage_account" "storage" {
   resource_group_name      = local.resource_group_name
   location                 = local.location_modified
   account_tier             = local.tier
-  account_replication_type = "GRS"
+  account_replication_type = "LRS"
 
   depends_on = [azurerm_resource_group.rg]
 }
