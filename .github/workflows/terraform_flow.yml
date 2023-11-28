@@ -16,6 +16,11 @@ on:
         - key-vault
         - storage-account
 
+permissions:
+  id-token: write
+  contents: read
+
+
 jobs:
   build:
     runs-on: self-hosted
