@@ -46,11 +46,11 @@ jobs:
 
       - name: run terraform plan
         working-directory: ${{ env.WORK_DIR }}
-        run: terraform plan -out=../../../plan$GITHUB_RUN_ID.json
+        run: terraform plan -out=~/plan$GITHUB_RUN_ID.json && echo "artifactPath=~/plan$GITHUB_RUN_ID.json" >> $GITHUB_ENV
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
-          name: Planning$GITHUB_RUN_ID
-          path: plan$GITHUB_RUN_ID.json
+          name: artifact
+          path: ${{ env.artifactPath }}
           retention-days: 1
