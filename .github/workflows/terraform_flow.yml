@@ -52,8 +52,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Planning$GITHUB_RUN_ID
-          path: "${GITHUB_WORKSPACE}/${{ env.WORK_DIR }}plan$GITHUB_RUN_ID"
+          path: "${{ GITHUB_WORKSPACE }}/${{ env.WORK_DIR }}plan$GITHUB_RUN_ID"
           retention-days: 1
+
+      - name: Debug
+        run: |
+            ls -R "${{ GITHUB_WORKSPACE }}/${{ env.WORK_DIR }}"
 
       # - name: terraform apply
       #   working-directory: ${{ env.WORK_DIR }}
