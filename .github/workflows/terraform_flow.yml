@@ -32,8 +32,6 @@ jobs:
       ARM_CLIENT_ID: ${{ inputs.environment == 'integration' && secrets.CLIENT_ID || secrets.CLIENT_ID_PROD}}
       ARM_CLIENT_SECRET: ${{ inputs.environment == 'integration' && secrets.CLIENT_SECRET || secrets.CLIENT_SECRET_PROD}}
 
-
-
     steps:
       - uses: actions/checkout@v3
 
@@ -54,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Planning$GITHUB_RUN_ID
-          path: ./plan$GITHUB_RUN_ID
+          path: ./${{ env.WORK_DIR }}/plan$GITHUB_RUN_ID
           retention-days: 1
 
       # - name: terraform apply
