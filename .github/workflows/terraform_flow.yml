@@ -46,7 +46,9 @@ jobs:
 
       - name: run terraform plan
         working-directory: ${{ env.WORK_DIR }}
-        run: terraform plan -out=../../../plan.json
+        run: |
+          terraform plan -out=./plan
+          terraform show -json ./plan > ../../plan.json
 
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
