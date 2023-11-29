@@ -5,12 +5,12 @@ terraform {
       version = ">=3.27.0"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "prod-kv-rg"
-    storage_account_name = "testingstoragee"
-    container_name       = "state"
-    key                  = "prodstorage.tfstate"
-  }
+  # backend "azurerm" {
+  #   resource_group_name  = "prod-kv-rg"
+  #   storage_account_name = "testingstoragee"
+  #   container_name       = "state"
+  #   key                  = "prodstorage.tfstate"
+  # }
 }
 
 provider "azurerm" {

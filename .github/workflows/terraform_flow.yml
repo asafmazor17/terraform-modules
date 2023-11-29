@@ -48,8 +48,15 @@ jobs:
 
       - name: run terraform plan
         working-directory: ${{ env.WORK_DIR }}
-        run: terraform plan
+        run: terraform plan -out=./plan$GITHUB_RUN_ID
 
-      - name: terraform apply
-        working-directory: ${{ env.WORK_DIR }}
-        run: terraform apply -auto-approve
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Planning$GITHUB_RUN_ID
+          path: ./plan$GITHUB_RUN_ID
+          retention-days: 1
+
+      # - name: terraform apply
+      #   working-directory: ${{ env.WORK_DIR }}
+      #   run: terraform apply -auto-approve
