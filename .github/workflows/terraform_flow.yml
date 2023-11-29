@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Planning$GITHUB_RUN_ID
-          path: ./${{ env.WORK_DIR }}/plan$GITHUB_RUN_ID
+          path: ./${{ env.WORK_DIR }}plan$GITHUB_RUN_ID
           retention-days: 1
 
       # - name: terraform apply
