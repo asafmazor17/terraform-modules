@@ -2,15 +2,15 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">=3.0.0"
+      version = ">=3.27.0"
     }
   }
-  # backend "azurerm" {
-  #   resource_group_name  = "prod-kv-rg"
-  #   storage_account_name = "testingstoragee"
-  #   container_name       = "test"
-  #   key                  = "prodstorage.tfstate"
-  # }
+  backend "azurerm" {
+    resource_group_name  = "prod-kv-rg"
+    storage_account_name = "testingstoragee"
+    container_name       = "state"
+    key                  = "prodstorage.tfstate"
+  }
 }
 
 provider "azurerm" {
